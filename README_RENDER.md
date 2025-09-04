@@ -3,6 +3,11 @@
 ## ✅ App Configurata per Render
 La tua app è ora completamente configurata per Render!
 
+### 📋 Account Render
+- **Account**: LABACHECADELLASICUREZZA
+- **Repository**: LABACHECADELLASICUREZZA/WEBAPPBACHECA
+- **Servizio**: webappbacheca
+
 ## 📋 File di Configurazione Creati
 - `render.yaml` - Configurazione Render
 - `.gitignore` - Esclude file sensibili
@@ -16,7 +21,7 @@ La tua app è ora completamente configurata per Render!
 - Clicca "New +" → "Web Service"
 
 ### 2. Connetti il Repository
-- Scegli il repository "WEBAPPBACHECA"
+- Scegli il repository "LABACHECADELLASICUREZZA/WEBAPPBACHECA"
 - Render rileverà automaticamente la configurazione
 
 ### 3. Configurazione Automatica
@@ -56,3 +61,6 @@ Aggiungi queste variabili in Render:
 
 ## 🎉 Risultato
 La tua app sarà sempre attiva e accessibile via web!
+
+### 🌐 URL Finale
+L'app sarà disponibile su: `https://webappbacheca.onrender.com`
