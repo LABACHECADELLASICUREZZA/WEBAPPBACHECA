@@ -34,7 +34,7 @@ def get_sheets_service():
         return None
 
 # Configurazione Google Sheets - AGGIORNA QUESTI VALORI
-SPREADSHEET_ID = '17t0lwJlczuxDrLFcM8kBqA3vYeBED89fir9TjiHDNI8'  # ID del tuo foglio "FILE PROVE DI GESTIONE"
+SPREADSHEET_ID = '1-Ki64dOkwpWeiBsR_4o6CTOGuXqQ-jWnIqNDTaBWVl8'  # ID del tuo foglio "FILE PROVE DI GESTIONE"
 SHEET_NAME = 'PUBBLICAZIONI DIPENDENTE'  # Nome del foglio per le pubblicazioni dipendenti
 
 # Configurazione Google Cloud Storage - AGGIORNA QUESTO VALORE

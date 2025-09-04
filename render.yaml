@@ -1,12 +1,15 @@
 services:
   - type: web
-    name: bacheca-sicurezza
+    name: bachecasicurezza
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.0
+        value: 3.11.0
       - key: PORT
-        value: 10000
-    plan: free
+        value: 8080
+    healthCheckPath: /
+    autoDeploy: true
+    branch: main
