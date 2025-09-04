@@ -244,6 +244,10 @@ def cerca_pubblicazioni():
     """API per cercare pubblicazioni"""
     try:
         print("🚀 API /api/cerca chiamata!")
+        print("🔧 Controllo variabili d'ambiente:")
+        print(f"   - GOOGLE_CREDENTIALS presente: {bool(os.environ.get('GOOGLE_CREDENTIALS'))}")
+        print(f"   - SPREADSHEET_ID: {os.environ.get('SPREADSHEET_ID', 'NON TROVATO')}")
+        
         data = request.get_json()
         print(f"📥 Dati ricevuti: {data}")
         
