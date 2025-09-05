@@ -1,66 +1,57 @@
-# 🚀 Deploy su Render - Istruzioni Complete
+# Guida Configurazione Render.com
 
-## ✅ App Configurata per Render
-La tua app è ora completamente configurata per Render!
+## Problema
+L'app pubblicata su Render.com non trova le pubblicazioni perché mancano le variabili d'ambiente necessarie per Google Sheets API.
 
-### 📋 Account Render
-- **Account**: LABACHECADELLASICUREZZA
-- **Repository**: LABACHECADELLASICUREZZA/WEBAPPBACHECA
-- **Servizio**: webappbacheca
+## Soluzione
 
-## 📋 File di Configurazione Creati
-- `render.yaml` - Configurazione Render
-- `.gitignore` - Esclude file sensibili
-- `requirements.txt` - Aggiornato per Render
+### 1. Configura le Variabili d'Ambiente su Render.com
 
-## 🚀 Passi per il Deploy
+Vai sul dashboard di Render.com e aggiungi queste variabili d'ambiente al tuo servizio:
 
-### 1. Vai su Render.com
-- Apri [render.com](https://render.com)
-- Registrati con GitHub
-- Clicca "New +" → "Web Service"
+#### GOOGLE_CREDENTIALS
+- **Chiave**: `GOOGLE_CREDENTIALS`
+- **Valore**: Il contenuto completo del tuo file `credentials.json` (tutto il JSON in una riga)
 
-### 2. Connetti il Repository
-- Scegli il repository "LABACHECADELLASICUREZZA/WEBAPPBACHECA"
-- Render rileverà automaticamente la configurazione
+**Come ottenere il valore:**
+1. Apri il file `credentials.json` locale
+2. Copia tutto il contenuto JSON
+3. Incollalo come valore della variabile d'ambiente
 
-### 3. Configurazione Automatica
-Render userà automaticamente:
-- **Build Command**: `pip install -r requirements.txt`
-- **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
-- **Python Version**: 3.11.0
+#### SPREADSHEET_ID
+- **Chiave**: `SPREADSHEET_ID`
+- **Valore**: L'ID del tuo Google Sheets (es: `1-Ki64dOkwpWeiBsR_4o6CTOGuXqQ-jWnIqNDTaBWVl8`)
 
-### 4. Variabili d'Ambiente
-Aggiungi queste variabili in Render:
-- `GOOGLE_CREDENTIALS` = contenuto del file credentials.json
-- `SPREADSHEET_ID` = 1-Ki64dOkwpWeiBsR_4o6CTOGuXqQ-jWnIqNDTaBWVl8
-- `BUCKET_NAME` = nome del tuo bucket Cloud Storage
+### 2. Test della Configurazione
 
-### 5. Deploy
-- Clicca "Create Web Service"
-- Render farà il deploy automaticamente
-- **Molto più veloce di FLY.io!**
+Esegui lo script di test per verificare che tutto sia configurato correttamente:
 
-## 🔧 Configurazione Tecnica
-- **Porta**: Dinamica (gestita da Render)
-- **Process Manager**: Gunicorn
-- **Python**: 3.11.0
-- **Health Check**: `/` (root)
+```bash
+python test_config.py
+```
 
-## 🎯 Vantaggi di Render
-- ✅ **Sempre attivo** (no cold start)
-- ✅ **Deploy veloce** (minuti, non ore)
-- ✅ **Più stabile** di FLY.io
-- ✅ **Supporta Python** nativamente
-- ✅ **Gratuito** per progetti personali
+### 3. Riavvio del Servizio
 
-## 🚨 Importante
-- **Non committare** il file `credentials.json`
-- Usa le **variabili d'ambiente** per le credenziali
-- Il deploy è **automatico** da GitHub
+Dopo aver configurato le variabili d'ambiente:
+1. Vai sul dashboard di Render.com
+2. Trova il tuo servizio
+3. Clicca su "Manual Deploy" o "Redeploy"
 
-## 🎉 Risultato
-La tua app sarà sempre attiva e accessibile via web!
+## Verifica
 
-### 🌐 URL Finale
-L'app sarà disponibile su: `https://webappbacheca.onrender.com`
+Dopo la configurazione, l'app dovrebbe funzionare correttamente su Render.com come funziona in locale.
+
+## Troubleshooting
+
+Se l'app ancora non funziona:
+
+1. **Controlla i log**: Vai su Render.com → Dashboard → Logs
+2. **Verifica le variabili**: Usa lo script `test_config.py`
+3. **Controlla i permessi**: Assicurati che il service account abbia accesso al Google Sheets
+
+## Differenze tra Locale e Render.com
+
+| Ambiente | Credenziali | File |
+|----------|-------------|------|
+| **Locale** | File `credentials.json` | Presente nella cartella |
+| **Render.com** | Variabile `GOOGLE_CREDENTIALS` | Configurata nel dashboard |

@@ -5,11 +5,16 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    dockerfilePath: null  # Forza l'uso del runtime Python invece di Docker
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
       - key: PORT
         value: 8080
+      - key: GOOGLE_CREDENTIALS
+        sync: false  # Questa variabile deve essere impostata manualmente nel dashboard di Render
+      - key: SPREADSHEET_ID
+        sync: false  # Questa variabile deve essere impostata manualmente nel dashboard di Render
     healthCheckPath: /
     autoDeploy: true
     branch: main

@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from google.cloud import storage
 import os
 import json
 from datetime import datetime
@@ -11,7 +10,7 @@ import pytz
 app = Flask(__name__, template_folder='.')
 
 # Configurazione CORS per permettere richieste da fly.dev
-CORS(app, origins=['https://bachecasicurezza.fly.dev', 'http://localhost:3000'])
+CORS(app, origins=['https://bachecasicurezza.fly.dev', 'http://localhost:3000', 'https://webappbacheca.onrender.com'])
 
 # Configurazione Google Sheets API
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -20,56 +19,60 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 def get_sheets_service():
     """Crea il servizio per Google Sheets API"""
     try:
+        print("🔧 Inizio creazione service Google Sheets...")
+        print(f"🔧 GOOGLE_CREDENTIALS presente: {bool(os.environ.get('GOOGLE_CREDENTIALS'))}")
+        print(f"🔧 SPREADSHEET_ID: {os.environ.get('SPREADSHEET_ID', 'NON TROVATO')}")
+        
         # Controlla se siamo su Vercel (variabili d'ambiente) o locale (file)
         if os.environ.get('GOOGLE_CREDENTIALS'):
+            print("🔧 Usando variabili d'ambiente per autenticazione...")
             # Su Vercel: usa le variabili d'ambiente
             credentials_info = json.loads(os.environ.get('GOOGLE_CREDENTIALS'))
+            print(f"🔧 Credentials info caricato: {bool(credentials_info)}")
             credentials = service_account.Credentials.from_service_account_info(
                 credentials_info, scopes=SCOPES)
+            print("🔧 Credentials create da variabili d'ambiente")
         else:
+            print("🔧 Usando file credentials.json per autenticazione...")
             # Locale: usa il file credentials.json
             SERVICE_ACCOUNT_FILE = 'credentials.json'
+            if not os.path.exists(SERVICE_ACCOUNT_FILE):
+                print(f"❌ File {SERVICE_ACCOUNT_FILE} non trovato!")
+                return None
             credentials = service_account.Credentials.from_service_account_file(
                 SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+            print("🔧 Credentials create da file")
         
+        print("🔧 Creazione service Google Sheets...")
         service = build('sheets', 'v4', credentials=credentials)
+        print("✅ Service Google Sheets creato con successo!")
         return service
     except Exception as e:
-        print(f"Errore nell'autenticazione: {e}")
+        print(f"❌ Errore nell'autenticazione: {e}")
+        print(f"❌ Tipo errore: {type(e).__name__}")
+        import traceback
+        print(f"❌ Traceback: {traceback.format_exc()}")
         return None
 
 # Configurazione Google Sheets - AGGIORNA QUESTI VALORI
-SPREADSHEET_ID = '1-Ki64dOkwpWeiBsR_4o6CTOGuXqQ-jWnIqNDTaBWVl8'  # ID del tuo foglio "FILE PROVE DI GESTIONE"
+SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID', '1-Ki64dOkwpWeiBsR_4o6CTOGuXqQ-jWnIqNDTaBWVl8')
 SHEET_NAME = 'PUBBLICAZIONI DIPENDENTE'  # Nome del foglio per le pubblicazioni dipendenti
-
-# Configurazione Google Cloud Storage - AGGIORNA QUESTO VALORE
-BUCKET_NAME = 'YOUR_BUCKET_NAME_HERE'  # Nome del tuo bucket Cloud Storage
-
-def get_storage_client():
-    """Crea il client per Google Cloud Storage"""
-    try:
-        # Controlla se siamo su Vercel (variabili d'ambiente) o locale (file)
-        if os.environ.get('GOOGLE_CREDENTIALS'):
-            # Su Vercel: usa le variabili d'ambiente
-            credentials_info = json.loads(os.environ.get('GOOGLE_CREDENTIALS'))
-            storage_client = storage.Client.from_service_account_info(credentials_info)
-        else:
-            # Locale: usa il file credentials.json
-            SERVICE_ACCOUNT_FILE = 'credentials.json'
-            storage_client = storage.Client.from_service_account_json(SERVICE_ACCOUNT_FILE)
-        
-        return storage_client
-    except Exception as e:
-        print(f"Errore nel client storage: {e}")
-        return None
 
 def cerca_in_sheets(codice_dipendente):
     """Cerca pubblicazioni nel foglio Google Sheets"""
     try:
+        print(f"🔍 Inizio ricerca per codice: {codice_dipendente}")
+        print(f"🔍 Ambiente: {'RENDER' if os.environ.get('RENDER') else 'LOCALE'}")
+        print(f"🔍 GOOGLE_CREDENTIALS presente: {bool(os.environ.get('GOOGLE_CREDENTIALS'))}")
+        print(f"🔍 SPREADSHEET_ID: {SPREADSHEET_ID}")
+        
         service = get_sheets_service()
         if not service:
             print("❌ Errore: Service account non disponibile")
             return []
+        
+        print(f"✅ Service account creato con successo")
+        print(f"🔍 SHEET_NAME: {SHEET_NAME}")
         
         # Range di ricerca (tutte le colonne A-K)
         range_name = f'{SHEET_NAME}!A:K'
@@ -119,6 +122,7 @@ def cerca_in_sheets(codice_dipendente):
         
     except Exception as e:
         print(f"❌ Errore nella ricerca su Sheets: {e}")
+        print(f"❌ Tipo errore: {type(e).__name__}")
         return []
 
 def aggiorna_stato_sheets(id_pubblicazione, nuovo_stato):
@@ -228,6 +232,52 @@ def get_sheets():
             'successo': True,
             'fogli': sheets
         })
+    except Exception as e:
+        return jsonify({
+            'successo': False,
+            'errore': str(e)
+        }), 500
+
+@app.route('/api/test', methods=['GET'])
+def test_connection():
+    """API per testare la connessione Google Sheets"""
+    try:
+        print("🧪 Test connessione Google Sheets...")
+        
+        # Test variabili d'ambiente
+        env_status = {
+            'GOOGLE_CREDENTIALS': bool(os.environ.get('GOOGLE_CREDENTIALS')),
+            'SPREADSHEET_ID': os.environ.get('SPREADSHEET_ID', 'NON TROVATO'),
+            'RENDER': bool(os.environ.get('RENDER')),
+            'PORT': os.environ.get('PORT', 'NON TROVATO')
+        }
+        
+        # Test service creation
+        service = get_sheets_service()
+        service_ok = service is not None
+        
+        # Test sheet access
+        if service_ok:
+            try:
+                result = service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
+                sheet_title = result.get('properties', {}).get('title', 'NON TROVATO')
+                sheets_count = len(result.get('sheets', []))
+            except Exception as e:
+                sheet_title = f"ERRORE: {str(e)}"
+                sheets_count = 0
+        else:
+            sheet_title = "SERVICE NON DISPONIBILE"
+            sheets_count = 0
+        
+        return jsonify({
+            'successo': True,
+            'ambiente': env_status,
+            'service_ok': service_ok,
+            'sheet_title': sheet_title,
+            'sheets_count': sheets_count,
+            'spreadsheet_id': SPREADSHEET_ID
+        })
+        
     except Exception as e:
         return jsonify({
             'successo': False,

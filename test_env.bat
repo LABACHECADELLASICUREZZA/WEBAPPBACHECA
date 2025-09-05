@@ -1,0 +1,13 @@
+@echo off
+echo Impostazione variabili d'ambiente per test...
+
+set GOOGLE_CREDENTIALS={"type":"service_account","project_id":"labachecadome","private_key_id":"0fd7f99e6ae866ea86fe5d0caa24a5e0e948ee49","private_key":"-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC14NNUbs7iblYq4\nQY2zPLYSdBgWxQzZX/IMSifIxC7xpUnu5ABW5ZK/qpC9+kbT/MnHvEeWOrp0WOhB\nJso6Q9qVNdi/QfsS3dTTflOOBvJ5Caf5e0aLVvBqhytYDth3KU5Hfj13zKQXnltZv\nPHsKgi1Np5tdFvZXFGOSEHCwxJYnhe++nJ4olSumkjrlZE6ZJI0tKVAm6888X9Ogu\nhFOLiLmryqK0dYxE2p4yuSyX8EhrWAebX8oTm1P6ufl+Fl9oqmPllFdh9IlWDCyJ\npHHx4Fc/sK1GvmLxAP/m3l+Wl7yyXLgROPLjqCn2jmVLeGRqhij8mlC+Sz4XEqth/\n59Oltb9XAgMBAAECggEAE9VbZ+nxTQYXBSt2MwAr2qyjnoKzzqs9JJnxkgh9a11yF\nnhy+7Lrxhcp+fjkMquamGmHYbJ7QNl/Q8/SG7lOil82Haqkx9/IOLgIDQ+KNtNsE\nzNI6L5STqDu2RYar46RkA+ezwbsiKbRReg0LVKBA0tdh72MA9nMFcb6aF+MDMnwKM\n7f5xBGajcglig1V+NqVV/I50f0ELQCUIP0QXEKpVpL7t35sOhwiB9TL177EDSsJ8\nnRiPQub8w4tG5pGoLn9XI+n8arL3QY3KzXVfmIhflPv/Wjr/ps+qh8hNLDOHWTg6e\npRhfyV9LTv2mNevpfKc/VwQ1adnL77w7pnmrOsbOAQKBgQDi7lXAKuDab5e6gWQI\naDHFpp8Wlqbbe1xIb3NI/JgViR2/Nrc2xUIZlsvAaSENSXLHqg8A0sSWj9J284Sv\nHBttt4H3rwyzQYVb7rvAhXBOa5PqL7ITrWlNPwQHZ5GGS0zYwufqmpIQJBgutdDwA\nlX+JLmTB5g4UGJsjNCQMwi1wswKBgQDNLRlvFU++L79UVttGalIvtSN1Kpgp/afWN\nolmaPqasAFCFKuRrM+GOoCUw3SztVmq6qqA0tTAma5Mx5DphPBP+m1dhpMfTRl1B\n2xCn6rG66AYChNkRvnlsjRleodcMKPzTjTYLaCrdi6OLbWe5RJKkKF2O2Jnq9v6Mr\nQ73LH6OAzQKBgQCNw5AkLWUscFwb8er46YZ2UAHATbrrNEAJ1adJePRYRFghURK0t\n9Qq3C6IbgFFaiJDAtLcMr56J5Cz5jGVOM0PbX0uqtdHQF48MSZvPa0MAF52BPe9H\nS7UR9KPgZ7Cgg1Xtb80LnSY0GShWPdTZqsvnqS+Y7zyjqWvjHhDIlGkTiywKBgCTc\nW1tnmrjrR371L0b0NQdWNdt5ZR1q7eCaMDrT0qHIFK83+311+/qDfCI90zON+yQHs\nMYgGnTXp0bH+7LYXUwhE5Df4oKXGWG7CaoWgVnmyV2efFkBvVLRLqOfs8DNhE6Fa\nhY2iqzur10XNLFGLLoorblOBenWKFkUzuiKR7dKZpAoGBANg2KvavdJOopgAINHVd\nZhvmYhNImxaHY0771IDL5nn0Z/W4QPUqRq62sFek0lcp4YVyhi55oZMDFrophTukA\nyljpo+UNmcyFeRaYFK5K4+xYTzl5pg5zelHeoIVj49XfAe5wTK0L1CbANcw4lq9r\nomauwG3n5BD/VoR2Qke00ow7c\n-----END PRIVATE KEY-----\n","client_email":"bacheca-sicurezza-labacheca@labachecadome.iam.gserviceaccount.com","client_id":"100457655396481643486","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/bacheca-sicurezza-labacheca%40labachecadome.iam.gserviceaccount.com"}
+
+set SPREADSHEET_ID=1-Ki64dOkwpWeiBsR_4o6CTOGuXqQ-jWnIqNDTaBWVl8
+
+echo Variabili d'ambiente impostate!
+echo.
+echo Ora eseguo il test...
+python test_config.py
+
+pause
