@@ -17,4 +17,4 @@ services:
         sync: false  # Questa variabile deve essere impostata manualmente nel dashboard di Render
     healthCheckPath: /
     autoDeploy: true
-    branch: main
+    branch: master
