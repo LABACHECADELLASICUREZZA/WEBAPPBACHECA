@@ -154,7 +154,8 @@ def aggiorna_stato_sheets(id_pubblicazione, nuovo_stato):
         
         # Cerca la riga con l'ID pubblicazione specifico (colonna J)
         row_index = None
-        print(f"🔍 Cerco ID pubblicazione: {id_pubblicazione}")
+        print(f"🔍 Cerco ID pubblicazione: '{id_pubblicazione}'")
+        print(f"🔍 Tipo ID cercato: {type(id_pubblicazione)}")
         
         for i, row in enumerate(values[1:], start=2):  # Inizia da 2 per saltare l'intestazione
             # Assicurati che la riga abbia abbastanza colonne
@@ -162,9 +163,13 @@ def aggiorna_stato_sheets(id_pubblicazione, nuovo_stato):
                 row.append('')
                 
             if len(row) > 9:
-                print(f"🔍 Riga {i}: IDPUBBLICAZIONE={row[9]}, cerca={id_pubblicazione}")
-                if str(row[9]).strip() == str(id_pubblicazione).strip():  # IDPUBBLICAZIONE in colonna J (indice 9)
-                    row_index = i + 1  # +1 perché Sheets è 1-based
+                current_id = str(row[9]).strip()
+                search_id = str(id_pubblicazione).strip()
+                print(f"🔍 Riga {i}: IDPUBBLICAZIONE='{current_id}', cerca='{search_id}'")
+                print(f"🔍 Match esatto: {current_id == search_id}")
+                
+                if current_id == search_id:  # IDPUBBLICAZIONE in colonna J (indice 9)
+                    row_index = i  # Non aggiungere +1, enumerate già parte da 2
                     print(f"✅ Match trovato! Riga {row_index}")
                     break
             else:
